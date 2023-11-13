@@ -1,0 +1,149 @@
+import UIKit
+import AWSMobileClient
+import AWSAppSync
+
+class UserProfile {
+    var userId: String
+    var userName: String
+    var profilePhoto: UIImage?
+    var aboutMe: String?
+    var coverPhoto: UIImage?
+    var attendPercentage: Double = 0.0
+    var eventsAttended: Int = 0
+
+    init(userId: String, userName: String) {
+        self.userId = userId
+        self.userName = userName
+    }
+}
+
+class Event {
+    var eventId: String
+    var eventName: String
+    var eventType: String
+    var date: Date
+    var attendees: [UserProfile] = []
+
+    init(eventId: String, eventName: String, eventType: String, date: Date) {
+        self.eventId = eventId
+        self.eventName = eventName
+        self.eventType = eventType
+        self.date = date
+    }
+}
+
+class MainViewController: UIViewController {
+
+    @IBOutlet weak var localEventsTableView: UITableView!
+    @IBOutlet weak var friendsTableView: UITableView!
+    @IBOutlet weak var profileImageView: UIImageView!
+    @IBOutlet weak var userNameLabel: UILabel!
+
+    var userProfiles: [UserProfile] = []
+    var localEvents: [Event] = []
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        configureAWS()
+        authenticateUser()
+        fetchUserData()
+        fetchLocalEvents()
+        configureUI()
+    }
+
+    func configureAWS() {
+        // Configure AWS services (AWSMobileClient, AWSAppSyncClient) here
+        // Refer to AWS documentation for detailed setup
+    }
+
+    func authenticateUser() {
+        // Implement user authentication logic using AWSMobileClient
+        // Display login screen if the user is not authenticated
+    }
+
+    func fetchUserData() {
+        // Implement logic to fetch user profile data from AWS backend
+        // Handle errors and display appropriate messages to the user
+    }
+
+    func fetchLocalEvents() {
+        // Implement logic to fetch local events from AWS backend
+        // Handle errors and display appropriate messages to the user
+    }
+
+    func configureUI() {
+        // Update UI elements with user profile data
+        profileImageView.image = userProfiles.first?.profilePhoto
+        userNameLabel.text = userProfiles.first?.userName
+    }
+}
+
+// ... (Continued in the next message)
+// ... (Continuation)
+
+extension MainViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return tableView == localEventsTableView ? localEvents.count : userProfiles.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if tableView == localEventsTableView {
+            // Configure cell for local events
+            let cell = tableView.dequeueReusableCell(withIdentifier: "LocalEventCell", for: indexPath) as! LocalEventCell
+            cell.configureCell(with: localEvents[indexPath.row])
+            return cell
+        } else {
+            // Configure cell for user profiles
+            let cell = tableView.dequeueReusableCell(withIdentifier: "UserProfileCell", for: indexPath) as! UserProfileCell
+            cell.configureCell(with: userProfiles[indexPath.row])
+            return cell
+        }
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // Implement logic for handling selection of local events or user profiles
+        // Add logic to handle errors and bugs during selection
+    }
+}
+
+class LocalEventCell: UITableViewCell {
+    func configureCell(with event: Event) {
+        // Implement logic to configure cell with local event data
+    }
+}
+
+class UserProfileCell: UITableViewCell {
+    func configureCell(with userProfile: UserProfile) {
+        // Implement logic to configure cell with user profile data
+    }
+}
+
+class UserProfileViewController: UIViewController {
+
+    @IBOutlet weak var profilePhotoImageView: UIImageView!
+    @IBOutlet weak var aboutMeTextView: UITextView!
+    @IBOutlet weak var coverPhotoImageView: UIImageView!
+    @IBOutlet weak var attendPercentageLabel: UILabel!
+
+    var userProfile: UserProfile?
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        configureUI()
+    }
+
+    func configureUI() {
+        // Update UI elements with user profile data
+        profilePhotoImageView.image = userProfile?.profilePhoto
+        aboutMeTextView.text = userProfile?.aboutMe
+        coverPhotoImageView.image = userProfile?.coverPhoto
+        attendPercentageLabel.text = "\(userProfile?.attendPercentage ?? 0)%"
+    }
+
+    @IBAction func editProfileTapped(_ sender: UIButton) {
+        // Implement logic to allow users to edit their profile
+        // This may involve presenting a modal or pushing a new view controller for editing
+    }
+
+    // Additional methods for handling profile editing
+}
